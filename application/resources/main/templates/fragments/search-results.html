@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+<div th:fragment="search-results">
+    <div th:if="${searchTerm != null and !searchTerm.empty}">
+        <h3 style="color: #495057; margin-bottom: var(--wa-spacing-lg);">
+            <i class="fas fa-search"></i>
+            Search results for "<span th:text="${searchTerm}"></span>"
+            <small style="color: #6c757d;">(<span th:text="${products.size()}"></span> found)</small>
+        </h3>
+    </div>
+
+    <div th:if="${products != null and !products.empty}">
+        <div style="display: grid; gap: var(--wa-spacing-md);">
+            <div th:each="product : ${products}"
+                 style="border: 1px solid #dee2e6; border-radius: var(--wa-border-radius); padding: var(--wa-spacing-lg); background: white; box-shadow: var(--wa-shadow);">
+
+                <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: var(--wa-spacing-sm);">
+                    <h4 style="margin: 0; color: var(--wa-color-primary);" th:text="${product.title}"></h4>
+                    <span style="font-size: var(--wa-font-size-lg); font-weight: 600; color: var(--wa-color-success);">
+                            $<span th:text="${#numbers.formatDecimal(product.price, 1, 2)}"></span>
+                        </span>
+                </div>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: var(--wa-spacing-md); margin-bottom: var(--wa-spacing-md);">
+                    <div>
+                        <strong>Handle:</strong>
+                        <code style="background: #f8f9fa; padding: 2px 6px; border-radius: 4px;" th:text="${product.handle}"></code>
+                    </div>
+                    <div>
+                        <strong>Vendor:</strong>
+                        <span th:text="${product.vendor ?: 'N/A'}" th:class="${product.vendor} ? '' : 'text-muted'"></span>
+                    </div>
+                </div>
+
+                <div th:if="${product.productType}" style="margin-bottom: var(--wa-spacing-md);">
+                    <strong>Type:</strong>
+                    <span th:text="${product.productType}" style="color: #6c757d;"></span>
+                </div>
+
+                <div style="display: flex; gap: var(--wa-spacing-sm); justify-content: flex-end;">
+                    <a th:href="@{/products/{id}/edit(id=${product.id})}"
+                       class="btn btn-primary"
+                       style="font-size: var(--wa-font-size-sm); padding: var(--wa-spacing-xs) var(--wa-spacing-sm);">
+                        <i class="fas fa-edit"></i>
+                        Edit
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div th:if="${searchTerm != null and !searchTerm.empty and (products == null or products.empty)}"
+         style="text-align: center; padding: var(--wa-spacing-xl); color: #6c757d;">
+        <i class="fas fa-search" style="font-size: 3rem; margin-bottom: var(--wa-spacing-md); opacity: 0.3;"></i>
+        <h4>No products found</h4>
+        <p>Try a different search term</p>
+    </div>
+
+    <div th:if="${searchTerm == null or searchTerm.empty}"
+         style="text-align: center; padding: var(--wa-spacing-xl); color: #6c757d;">
+        <i class="fas fa-info-circle"></i>
+        Start typing to search for products
+    </div>
+</div>
+</body>
+</html>

@@ -1,6 +1,6 @@
 package com.upwork.free.upwfree.controllers
 
-import com.upwork.free.upwfree.entities.Product
+import com.upwork.free.upwfree.models.Product
 import com.upwork.free.upwfree.services.ProductService
 
 
@@ -15,7 +15,7 @@ class ProductController(private val productService: ProductService) {
 
     @GetMapping("")
     fun index(model: Model): String {
-        model.addAttribute("pageTitle", "cc Manager")
+        model.addAttribute("pageTitle", "From Othman")
         return "index"
     }
 

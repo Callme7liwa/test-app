@@ -1,16 +1,17 @@
 package com.upwork.free.upwfree.services
 
+import com.upwork.free.upwfree.models.FammeProduct
+import com.upwork.free.upwfree.models.Product
+
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import com.upwork.free.upwfree.dtos.FammeProduct
-import com.upwork.free.upwfree.dtos.FammeProductResponse
-import com.upwork.free.upwfree.entities.Product
+import com.upwork.free.upwfree.models.FammeProductResponse
 import com.upwork.free.upwfree.repositories.ProductRepository
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.scheduling.annotation.Scheduled
-import org.springframework.stereotype.Component
 import org.springframework.stereotype.Service
+import org.springframework.stereotype.Component
 import org.springframework.web.reactive.function.client.WebClient
 import java.math.BigDecimal
 
@@ -46,7 +47,7 @@ class ProductService(
         return productRepository.findByTitleContaining(searchTerm)
     }
 
-//     Scheduled job with initialDelay=0 as required
+    // Scheduled job with initialDelay=0 as required - DISABLED for testing
     @Scheduled(fixedRate = 3600000, initialDelay = 0) // Run every hour, start immediately
     fun fetchProductsFromFamme() {
         try {
@@ -96,7 +97,7 @@ class ProductService(
             handle = fammeProduct.handle,
             productType = fammeProduct.productType,
             vendor = fammeProduct.vendor,
-            tags = fammeProduct.tags,
+            tags = fammeProduct.tags, // ← Direct assignment, no conversion needed!
             variants = variantsJson
         )
     }

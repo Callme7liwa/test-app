@@ -2,10 +2,10 @@ spring:
   application:
     name: upwfree
   datasource:
-    url: jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
-    username: sa
-    password:
-    driver-class-name: org.h2.Driver
+    url: ${DB_URL:jdbc:postgresql://localhost:5432/postgres}
+    username: ${USERNAME:postgres}
+    password: ${PASSWORD:mysecretpassword}
+    driver-class-name: org.postgresql.Driver
 
   flyway:
     enabled: true
@@ -13,11 +13,6 @@ spring:
 
   thymeleaf:
     cache: false
-
-  h2:
-    console:
-      enabled: true
-      path: /h2-console
 
 server:
   port: 8080
@@ -28,3 +23,9 @@ app:
     fetch:
       url: https://famme.no/products.json
       limit: 50
+
+# Logging
+logging:
+  level:
+    org.springframework.web: INFO
+    com.example.upwfree: DEBUG

@@ -15,7 +15,7 @@
     </div>
 
     <!-- Edit Product Form -->
-    <div th:if="${product}">
+    <div th:if="${product != null}">
         <form th:hx-put="@{/products/{id}(id=${product.id})}"
               hx-target="#edit-form-container"
               hx-indicator="#update-loading">
@@ -102,7 +102,7 @@
         </form>
     </div>
 
-    <div th:if="${!product}" class="alert alert-error">
+    <div th:if="${product == null}" class="alert alert-error">
         <i class="fas fa-exclamation-triangle"></i>
         Product not found!
     </div>

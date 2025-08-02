@@ -1,14 +1,11 @@
-package com.upwork.free.upwfree.repositories
-
-import com.upwork.free.upwfree.entities.Product
-
+package com.upwork.free.upwfree.repositories;
 
 import com.fasterxml.jackson.databind.ObjectMapper
+import com.upwork.free.upwfree.models.Product
 import org.springframework.jdbc.core.simple.JdbcClient
 import org.springframework.stereotype.Repository
 import org.springframework.stereotype.Component
 import java.sql.ResultSet
-
 
 @Repository
 @Component
@@ -46,7 +43,7 @@ class ProductRepository(
                 .param(product.handle)
                 .param(product.productType)
                 .param(product.vendor)
-                .param(product.tags)
+                .param(product.tags?.let { objectMapper.writeValueAsString(it) })
                 .param(product.variants)
                 .update()
 
@@ -66,7 +63,7 @@ class ProductRepository(
                 .param(product.handle)
                 .param(product.productType)
                 .param(product.vendor)
-                .param(product.tags)
+                .param(product.tags?.let { objectMapper.writeValueAsString(it) })
                 .param(product.variants)
                 .param(product.id)
                 .update()
@@ -99,7 +96,13 @@ class ProductRepository(
             handle = rs.getString("handle"),
             productType = rs.getString("product_type"),
             vendor = rs.getString("vendor"),
-            tags = rs.getString("tags"),
+            tags = rs.getString("tags")?.let { tagsJson ->
+                try {
+                    objectMapper.readValue(tagsJson, object : com.fasterxml.jackson.core.type.TypeReference<List<String>>() {})
+                } catch (e: Exception) {
+                    listOf(tagsJson)
+                }
+            },
             variants = rs.getString("variants"),
             createdAt = rs.getTimestamp("created_at")?.toLocalDateTime(),
             updatedAt = rs.getTimestamp("updated_at")?.toLocalDateTime()
